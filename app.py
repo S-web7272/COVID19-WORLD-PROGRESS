@@ -31,7 +31,7 @@ for col in df:
 
 st.header("Univariate analysis of numrical data")
 
-cols = ['total_vaccinations','people_vaccinated']
+cols = ['total_vaccinations','people_vaccinated','people_fully_vaccinated','daily_vaccinations_raw','daily_vaccinations','total_vaccinations_per_hundred','people_vaccinated_per_hundred','people_fully_vaccinated_per_hundred','daily_vaccinations_per_million','']
 c = st.beta_columns(2)
 col = c[0].selectbox("select a column",cols)
 gap = c[1].selectbox("select a range to display",['D','3D','W','2W','M','2M'])
