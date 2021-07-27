@@ -41,5 +41,11 @@ c[0].write(sub_df)
 fig =  px.bar(sub_df,x=sub_df.index,y=col)
 c[1].plotly_chart(fig)
 
+st.sidebar.subheader("geographic visualization")
+cols = [
+    
+]
+cols=st.sidebar.multiselect("select two columns",df.columns.tolist())
+
 
 

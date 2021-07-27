@@ -14,6 +14,8 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+import folium
+from streamlit_folium import folium_static
 
 ############--------page - setup-------###############
 
@@ -23,7 +25,7 @@ st.set_page_config(page_title="covid19 world vaccination progress visulaization"
 
 
 st.sidebar.header('<i>Covid-19 World Vaccination Progress Visualization</i>',anchor="vaccination progress",)
-img=Image.open("image\images (6).jpg")
+img=Image.open("image\images (7).png")
 st.sidebar.image(img,width=300)
 
 ##############--------header-------------###############
@@ -60,7 +62,7 @@ with st.spinner("loading data...."):
 st.markdown('<h1 class="mainhead"> <i>Covid-19 World Vaccination Progress Visualization</i> </h1> <img src=""/>',unsafe_allow_html=True)
 col1,col2=st.beta_columns([5,10])
 with col1:
-    st.image('image\icon.gif')
+    st.image('image\d41586-019-03635-9_17408652.gif')
 with col2:
     col=st.beta_container()
     with col:
@@ -199,3 +201,30 @@ if len(cols) >= 2:
     df[cols].resample('W').sum().plot(kind=kind,ax=ax,legend=True,title=f"{cols[0]} vs {cols[1]}")
     c[1].pyplot(fig)
 
+st.sidebar.subheader("geographic visualization")
+cols=['total_vaccinations',
+ 'people_vaccinated',
+ 'people_fully_vaccinated',
+ 'daily_vaccinations_raw',
+ 'daily_vaccinations',
+ 'total_vaccinations_per_hundred',
+ 'people_vaccinated_per_hundred',
+ 'people_fully_vaccinated_per_hundred',
+ 'daily_vaccinations_per_million']
+col = st.sidebar.selectbox("select a column for map",cols)
+geodata = df.groupby('country')[col].sum()
+
+if col:
+    map = folium.Map(location=[0,0], zoom_start=2)
+    map.choropleth(
+    geo_data='world_countries.json',
+    name='choropleth',
+    data=geodata,
+    columns=[geodata.index,col],
+    key_on='feature.properties.name',
+    fill_color='YlOrRd',
+    fill_opacity=.5,
+    line_opacity=0.2,
+    legend_name=col)
+    st.subheader(f"geo visualization of {col} ")
+    folium_static(map,width=900)
